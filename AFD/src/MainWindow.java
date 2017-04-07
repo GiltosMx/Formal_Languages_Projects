@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 
 public class MainWindow {
 
-	//Atributos programación
+	//Atributos programacion
 	String[] arrayAlfabeto; 
 	String[] arrayEstados;
 	String[] arrayEstadosFinales;
@@ -30,6 +30,7 @@ public class MainWindow {
 				try {
 					MainWindow window = new MainWindow();
 					window.frmMainWindow.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

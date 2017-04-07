@@ -97,7 +97,7 @@ public class TranTable extends JFrame {
 			Integer currentStateIndex = stateIndex.get(arrayEstados[0]); //Siempre el primer estado es el inicial
 			boolean isAccepted = false; //Bandera para saber si las cadenas son aceptadas
 			
-			if(arrayCadenas[i].trim().length() > 0) { //Tratar de procesar sólo si hay cadena
+			if(arrayCadenas[i].trim().length() > 0) { //Tratar de procesar solo si hay cadena
 				String[] currentSymbols = arrayCadenas[i].split(""); //Arreglo con cada simbolo de la cadena actual
 				
 				//Itera sobre cada simbolo de la cadena actual

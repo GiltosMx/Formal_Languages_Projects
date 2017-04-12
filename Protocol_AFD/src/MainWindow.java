@@ -5,20 +5,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
-import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
-import javax.swing.JLabel;
-import java.awt.Color;
 import javax.swing.JScrollPane;
 import java.awt.Label;
-import java.util.concurrent.TimeUnit;
 
 public class MainWindow extends JFrame {
 
 	private JPanel contentPane;
 	public static JTextPane ConsolePane;
+	private String message_PC1;
+	private String message_PC2;
 	
 	
 	private static String[][] transitionsTable = {
@@ -49,9 +47,7 @@ public class MainWindow extends JFrame {
 					
 					ProtocolBehavior protocolAFD = new ProtocolBehavior(transitionsTable, arrayAlfabeto, arrayEstados, arrayEstadosFinales, arrayCadenas, ConsolePane);
 					
-					
-					protocolAFD.AFDSimulator();					
-					System.out.println("\n" + protocolAFD.message);
+					protocolAFD.AFDSimulator();										
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -78,13 +74,13 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnPc.setIcon(new ImageIcon("/home/adrian/EclipseWorkspaces/Formal_Languages_Projects/Protocol_AFD/icons/ic_airplay_black_24dp_2x.png"));
+		btnPc.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
 		btnPc.setBounds(39, 35, 125, 64);
 		contentPane.add(btnPc);
 		
 		JButton btnPc_1 = new JButton("PC 2");
 		btnPc_1.setToolTipText("Configurar PC2");
-		btnPc_1.setIcon(new ImageIcon("/home/adrian/EclipseWorkspaces/Formal_Languages_Projects/Protocol_AFD/icons/ic_airplay_black_24dp_2x.png"));
+		btnPc_1.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
 		btnPc_1.setBounds(442, 35, 130, 64);
 		contentPane.add(btnPc_1);
 		

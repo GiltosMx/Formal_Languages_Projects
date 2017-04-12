@@ -1,17 +1,18 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.JTextPane;
 
 public class ProtocolBehavior {
 	
 									//Atributos
 	//---------------------------------------------------------------------//
-	public String message;
+	public String[] statusMessage;
 	private JTextPane ConsolePane;
+	private Timer timer;
+	private int messageIndex;
+	private StringBuilder consoleText;
 	
 	private String[][] transitionsTable;
 	private String[] arrayAlfabeto;
@@ -28,8 +29,14 @@ public class ProtocolBehavior {
 	//---------------------------------------------------------------------//
 	
 	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, String[] arrayEstadosFinales, String[] arrayCadenas, JTextPane ConsolePane){
+		
+		timer = new Timer(4000, updateConsole);
+		timer.start();
+		
+		messageIndex = 0;
 		isAccepted = false;
-		this.message = new String();
+		consoleText = new StringBuilder();
+		this.statusMessage = new String[7];
 		this.ConsolePane = ConsolePane;
 		
 		this.transitionsTable = transitionsTable;
@@ -51,14 +58,10 @@ public class ProtocolBehavior {
 			
 		}
 		
-//		System.out.println("symbolIndex:\n\n" + symbolIndex.toString());
-		
 		for (int i = 0; i < arrayEstados.length; i++) {
 			stateIndex.put(arrayEstados[i], i);
 			
 		}	
-		
-//		System.out.println("stateIndex:" + stateIndex.toString());
 	}
 	
 	public void AFDSimulator(){
@@ -73,20 +76,20 @@ public class ProtocolBehavior {
 													
 				Integer currentSymbol = symbolIndex.get(arrayCadenas[i]);
 				
-				message += arrayCadenas[i] + "...\n";
-				
-				ConsolePane.setText(message);
-				
+				statusMessage[messageIndex] = arrayCadenas[i] + "...\n";
+				messageIndex++;
 				
 				currentStateIndex = stateIndex.get(transitionsTable[currentStateIndex][currentSymbol].trim());
 				
 				if(currentStateIndex == 5){
 					
-					message += "Hubo un error. Espere...\n";
+					statusMessage[messageIndex] = "Hubo un error. Espere...\n";
+					messageIndex++;					
 					
 				}else if(currentStateIndex == 6){
 					
-					message += "El mensaje se recibio correctamente!\n";
+					statusMessage[messageIndex] = "El mensaje se recibio correctamente!\n";
+					messageIndex++;					
 				}
 				
 			}
@@ -95,13 +98,26 @@ public class ProtocolBehavior {
 			for (String estado : arrayEstadosFinales) {
 				if(estado.equals(arrayEstados[currentStateIndex])){					
 					isAccepted = true;
-					
-					
 				}
 			}
 		}
+		messageIndex = 0;
 	}
 
-	
+	ActionListener updateConsole = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(messageIndex < statusMessage.length){
+				consoleText.append(statusMessage[messageIndex]);
+				messageIndex++;
+			}
+			else{
+				timer.stop();
+			}
+			
+			ConsolePane.setText(consoleText.toString());
+		}
+	};
 
 }

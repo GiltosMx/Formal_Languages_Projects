@@ -9,10 +9,13 @@ public class ProtocolBehavior {
 									//Atributos
 	//---------------------------------------------------------------------//
 	public String[] statusMessage;
+	private int requestingPC;
 	private JTextPane ConsolePane;
 	private Timer timer;
 	private int messageIndex;
 	private StringBuilder consoleText;
+	private String message_PC1;
+	private String message_PC2;
 	
 	private String[][] transitionsTable;
 	private String[] arrayAlfabeto;
@@ -28,7 +31,8 @@ public class ProtocolBehavior {
 	
 	//---------------------------------------------------------------------//
 	
-	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, String[] arrayEstadosFinales, String[] arrayCadenas, JTextPane ConsolePane){
+	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, String[] arrayEstadosFinales,
+			String[] arrayCadenas, JTextPane ConsolePane, String message_PC1, String message_PC2, int requestingPC){
 		
 		timer = new Timer(4000, updateConsole);
 		timer.start();
@@ -36,7 +40,10 @@ public class ProtocolBehavior {
 		messageIndex = 0;
 		isAccepted = false;
 		consoleText = new StringBuilder();
+		this.requestingPC = requestingPC;
 		this.statusMessage = new String[7];
+		this.message_PC1 = message_PC1;
+		this.message_PC2 = message_PC2;
 		this.ConsolePane = ConsolePane;
 		
 		this.transitionsTable = transitionsTable;
@@ -52,17 +59,18 @@ public class ProtocolBehavior {
 	
 	
 	private void FillHashMaps(){
-		
-		for (int i = 0; i < arrayAlfabeto.length; i++) {			
-			symbolIndex.put(arrayAlfabeto[i], i);		
 			
+			for (int i = 0; i < arrayAlfabeto.length; i++) {			
+				symbolIndex.put(arrayAlfabeto[i], i);		
+				
+			}
+			
+			for (int i = 0; i < arrayEstados.length; i++) {
+				stateIndex.put(arrayEstados[i], i);
+				
+			}	
 		}
-		
-		for (int i = 0; i < arrayEstados.length; i++) {
-			stateIndex.put(arrayEstados[i], i);
-			
-		}	
-	}
+	
 	
 	public void AFDSimulator(){
 		
@@ -83,13 +91,21 @@ public class ProtocolBehavior {
 				
 				if(currentStateIndex == 5){
 					
-					statusMessage[messageIndex] = "Hubo un error. Espere...\n";
+					statusMessage[messageIndex] = "An error ocurred. Please wait...\n";
 					messageIndex++;					
 					
 				}else if(currentStateIndex == 6){
 					
-					statusMessage[messageIndex] = "El mensaje se recibio correctamente!\n";
-					messageIndex++;					
+					if(requestingPC == 1){
+						statusMessage[messageIndex] = "The message was received succesfully!\n" + 
+													"Message from PC2:\n" + message_PC2 + "\n\nEnd of message...\n\n";					
+					}
+					else if(requestingPC == 2){
+						statusMessage[messageIndex] = "The message was received succesfully!\n" + 
+													"Message from PC1:\n" + message_PC1 + "\n\nEnd of message...\n\n";
+					}
+					
+					messageIndex++;
 				}
 				
 			}

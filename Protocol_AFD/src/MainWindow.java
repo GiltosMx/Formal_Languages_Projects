@@ -1,5 +1,6 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
+import javax.swing.Timer;
 import javax.swing.JScrollPane;
 import java.awt.Label;
 
@@ -15,8 +17,9 @@ public class MainWindow extends JFrame {
 
 	private JPanel contentPane;
 	public static JTextPane ConsolePane;
-	private String message_PC1;
-	private String message_PC2;
+	private static String message_PC1;
+	private static String message_PC2;
+	private static int requestingPC = 0;
 	
 	
 	private static String[][] transitionsTable = {
@@ -43,11 +46,7 @@ public class MainWindow extends JFrame {
 			public void run() {
 				try {
 					MainWindow frame = new MainWindow();
-					frame.setVisible(true);
-					
-					ProtocolBehavior protocolAFD = new ProtocolBehavior(transitionsTable, arrayAlfabeto, arrayEstados, arrayEstadosFinales, arrayCadenas, ConsolePane);
-					
-					protocolAFD.AFDSimulator();										
+					frame.setVisible(true);										
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,7 +58,7 @@ public class MainWindow extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow() {
+	public MainWindow() {		
 		setTitle("Protocol_AFD");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 626, 397);
@@ -72,6 +71,7 @@ public class MainWindow extends JFrame {
 		btnPc.setToolTipText("Configurar PC1");
 		btnPc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				message_PC1 = JOptionPane.showInputDialog(null, "Enter message to be stored in this PC:", "Config PC", JOptionPane.QUESTION_MESSAGE);
 			}
 		});
 		btnPc.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
@@ -79,6 +79,11 @@ public class MainWindow extends JFrame {
 		contentPane.add(btnPc);
 		
 		JButton btnPc_1 = new JButton("PC 2");
+		btnPc_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				message_PC2 = JOptionPane.showInputDialog(null, "Enter message to be stored in this PC:", "Config PC", JOptionPane.QUESTION_MESSAGE);
+			}
+		});
 		btnPc_1.setToolTipText("Configurar PC2");
 		btnPc_1.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
 		btnPc_1.setBounds(442, 35, 130, 64);
@@ -101,8 +106,34 @@ public class MainWindow extends JFrame {
 		ConsoleArea.setBounds(250, 158, 97, 21);
 		contentPane.add(ConsoleArea);
 		
+		JButton btnRequestMessagePC1 = new JButton("Request Message");
+		btnRequestMessagePC1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				requestingPC = 1;
+				startRequest();
+			}
+		});
+		btnRequestMessagePC1.setToolTipText("Pedir mensaje de la PC2");
+		btnRequestMessagePC1.setBounds(29, 125, 150, 25);
+		contentPane.add(btnRequestMessagePC1);
 		
+		JButton btnRequestMessagePC2 = new JButton("Request Message");
+		btnRequestMessagePC2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				requestingPC = 2;
+				startRequest();
+			}
+		});
+		btnRequestMessagePC2.setToolTipText("Pedir mensaje de la PC1");
+		btnRequestMessagePC2.setBounds(432, 127, 150, 21);
+		contentPane.add(btnRequestMessagePC2);
+	}
+	
+	
+	private void startRequest(){
+		ProtocolBehavior protocolAFD = new ProtocolBehavior(transitionsTable, arrayAlfabeto, arrayEstados, arrayEstadosFinales, 
+				arrayCadenas, ConsolePane, message_PC1, message_PC2, requestingPC);
 		
-		
+		protocolAFD.AFDSimulator();
 	}
 }

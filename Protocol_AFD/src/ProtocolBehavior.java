@@ -2,6 +2,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import javax.swing.Timer;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
 
 public class ProtocolBehavior {
@@ -16,6 +19,8 @@ public class ProtocolBehavior {
 	private StringBuilder consoleText;
 	private String message_PC1;
 	private String message_PC2;
+	private JButton btnPc1;
+	private JButton btnPc2;
 	
 	private String[][] transitionsTable;
 	private String[] arrayAlfabeto;
@@ -31,20 +36,22 @@ public class ProtocolBehavior {
 	
 	//---------------------------------------------------------------------//
 	
-	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, String[] arrayEstadosFinales,
-			String[] arrayCadenas, JTextPane ConsolePane, String message_PC1, String message_PC2, int requestingPC){
+	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, 
+			String[] arrayEstadosFinales,String[] arrayCadenas, JTextPane ConsolePane, 
+			String message_PC1, String message_PC2, int requestingPC, JButton btnPc1, JButton btnPc2){
 		
-		timer = new Timer(4000, updateConsole);
-		timer.start();
+		timer = new Timer(2500, updateGUI);
 		
 		messageIndex = 0;
 		isAccepted = false;
 		consoleText = new StringBuilder();
 		this.requestingPC = requestingPC;
-		this.statusMessage = new String[7];
+		this.statusMessage = new String[arrayCadenas.length + 1];
 		this.message_PC1 = message_PC1;
 		this.message_PC2 = message_PC2;
 		this.ConsolePane = ConsolePane;
+		this.btnPc1 = btnPc1;
+		this.btnPc2 = btnPc2;
 		
 		this.transitionsTable = transitionsTable;
 		this.arrayAlfabeto = arrayAlfabeto;
@@ -92,7 +99,8 @@ public class ProtocolBehavior {
 				if(currentStateIndex == 5){
 					
 					statusMessage[messageIndex] = "An error ocurred. Please wait...\n";
-					messageIndex++;					
+					messageIndex++;
+					break;
 					
 				}else if(currentStateIndex == 6){
 					
@@ -117,23 +125,140 @@ public class ProtocolBehavior {
 				}
 			}
 		}
-		messageIndex = 0;
-	}
-
-	ActionListener updateConsole = new ActionListener() {
 		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if(messageIndex < statusMessage.length){
-				consoleText.append(statusMessage[messageIndex]);
-				messageIndex++;
-			}
-			else{
-				timer.stop();
-			}
+		//Inicia el timer despues de simular el protocolo
+		messageIndex = 0;
+		timer.start();
+	}
+	
+	ActionListener updateGUI = new ActionListener() {
 			
-			ConsolePane.setText(consoleText.toString());
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeIcons();
+				updateConsole();
+			}
+		};
+	
+	public void changeIcons(){
+		
+		if(messageIndex < (isAccepted ? statusMessage.length : 4)){
+			
+			if(requestingPC == 1){
+				
+				if(statusMessage[messageIndex].contains("RFNM_S")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+				}
+				else if(statusMessage[messageIndex].contains("RFNM_E")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+				}
+				else if(statusMessage[messageIndex].contains("ACK_S")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+				}
+				else if(statusMessage[messageIndex].contains("MSG_S")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+				}
+				else if(statusMessage[messageIndex].contains("ACK_R")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+				}
+				else if(statusMessage[messageIndex].contains("ACK_N")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+				}
+				else if(statusMessage[messageIndex].contains("The message was received succesfully!")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+				}
+				else if(statusMessage[messageIndex].contains("TO_RST")){
+					if(isAccepted){
+						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					}
+					else if(!isAccepted){
+						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					}
+				}
+			}
+			else if(requestingPC == 2){
+				
+				if(statusMessage[messageIndex].contains("RFNM_S")){			
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));				
+				}				
+				else if(statusMessage[messageIndex].contains("RFNM_E")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));			
+				}
+				else if(statusMessage[messageIndex].contains("ACK_S")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+				}
+				else if(statusMessage[messageIndex].contains("MSG_S")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+				}
+				else if(statusMessage[messageIndex].contains("ACK_R")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+				}
+				else if(statusMessage[messageIndex].contains("ACK_N")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+				}
+				else if(statusMessage[messageIndex].contains("The message was received succesfully!")){
+					btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+					btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+				}
+				else if(statusMessage[messageIndex].contains("TO_RST")){
+					if(isAccepted){
+						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
+					}
+					else if(!isAccepted){
+						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
+					}
+				}								
+			}
 		}
-	};
+		else{
+			btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+			btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+			
+		}
+	}
+	
+	private void updateConsole(){		
+		int arrayLimit = 0;
+		
+		if(isAccepted){
+			arrayLimit = statusMessage.length;			
+		}
+		else{
+			arrayLimit = 4;
+		}
+		
+		if(messageIndex < arrayLimit){
+			consoleText.append(statusMessage[messageIndex]);
+			if(!isAccepted && messageIndex >= 3){
+				messageIndex++;
+				changeIcons();
+				timer.stop();
+				JOptionPane.showMessageDialog(null, "Simulation ended!", "Status", JOptionPane.INFORMATION_MESSAGE);
+			}
+			messageIndex++;
+		}
+		else{
+			timer.stop();
+		}
+		
+		ConsolePane.setText(consoleText.toString());
+	}
 
 }

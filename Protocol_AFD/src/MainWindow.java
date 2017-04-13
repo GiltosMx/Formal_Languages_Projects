@@ -12,11 +12,18 @@ import javax.swing.JTextPane;
 import javax.swing.Timer;
 import javax.swing.JScrollPane;
 import java.awt.Label;
+import javax.swing.JLabel;
+import java.awt.Color;
 
 public class MainWindow extends JFrame {
 
 	private JPanel contentPane;
 	public static JTextPane ConsolePane;
+	private JLabel lblErrorStatus;
+	private static JButton btnPc1;
+	private static JButton btnPc2;
+	
+	
 	private static String message_PC1;
 	private static String message_PC2;
 	private static int requestingPC = 0;
@@ -36,7 +43,7 @@ public class MainWindow extends JFrame {
 	private static String[] arrayAlfabeto = {"RFNM_S","RFNM_E","ACK_S", "ACK_R", "ACK_N", "MSG_S","TO_RST"};
 	private static String[] arrayEstados = {"q0", "q1", "q2", "q3", "q4", "q5", "q6"};
 	private static String[] arrayEstadosFinales = {"q0"};
-	private static String[] arrayCadenas = {"RFNM_S", "RFNM_E", "ACK_S", "MSG_S", "ACK_R", "TO_RST"};
+	private static String[] arrayCadenas = {"RFNM_S", "RFNM_E", "ACK_S", "MSG_S", "ACK_N", "MSG_S","ACK_R", "TO_RST"};
 
 	/**
 	 * Launch the application.
@@ -46,7 +53,7 @@ public class MainWindow extends JFrame {
 			public void run() {
 				try {
 					MainWindow frame = new MainWindow();
-					frame.setVisible(true);										
+					frame.setVisible(true);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,27 +74,27 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnPc = new JButton("PC 1");
-		btnPc.setToolTipText("Configurar PC1");
-		btnPc.addActionListener(new ActionListener() {
+		btnPc1 = new JButton("PC 1");
+		btnPc1.setToolTipText("Configurar PC1");
+		btnPc1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				message_PC1 = JOptionPane.showInputDialog(null, "Enter message to be stored in this PC:", "Config PC", JOptionPane.QUESTION_MESSAGE);
 			}
 		});
-		btnPc.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
-		btnPc.setBounds(39, 35, 125, 64);
-		contentPane.add(btnPc);
+		btnPc1.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+		btnPc1.setBounds(39, 35, 125, 64);
+		contentPane.add(btnPc1);
 		
-		JButton btnPc_1 = new JButton("PC 2");
-		btnPc_1.addActionListener(new ActionListener() {
+		btnPc2 = new JButton("PC 2");
+		btnPc2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				message_PC2 = JOptionPane.showInputDialog(null, "Enter message to be stored in this PC:", "Config PC", JOptionPane.QUESTION_MESSAGE);
 			}
 		});
-		btnPc_1.setToolTipText("Configurar PC2");
-		btnPc_1.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
-		btnPc_1.setBounds(442, 35, 130, 64);
-		contentPane.add(btnPc_1);
+		btnPc2.setToolTipText("Configurar PC2");
+		btnPc2.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
+		btnPc2.setBounds(442, 35, 130, 64);
+		contentPane.add(btnPc2);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(0, 175, 617, 2);
@@ -127,12 +134,39 @@ public class MainWindow extends JFrame {
 		btnRequestMessagePC2.setToolTipText("Pedir mensaje de la PC1");
 		btnRequestMessagePC2.setBounds(432, 127, 150, 21);
 		contentPane.add(btnRequestMessagePC2);
+		
+		JButton btnErrorSimulation = new JButton("Toggle Error Simulation");
+		btnErrorSimulation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(lblErrorStatus.getText().length() == 0){
+					lblErrorStatus.setText("ERROR SIMULATION ENABLED");
+					
+					//arrayCadenas = {"RFNM_S", "RFNM_E", "ACK_S", "MSG_S", "ACK_R", "TO_RST"};
+					
+					arrayCadenas[2] = "";
+				}
+				else{
+					lblErrorStatus.setText("");
+					
+					arrayCadenas[2] = "ACK_S";
+				}
+				
+			}
+		});
+		btnErrorSimulation.setBounds(217, 72, 175, 25);
+		contentPane.add(btnErrorSimulation);
+		
+		lblErrorStatus = new JLabel("");
+		lblErrorStatus.setForeground(Color.RED);
+		lblErrorStatus.setBounds(217, 17, 200, 15);
+		contentPane.add(lblErrorStatus);
 	}
 	
 	
 	private void startRequest(){
 		ProtocolBehavior protocolAFD = new ProtocolBehavior(transitionsTable, arrayAlfabeto, arrayEstados, arrayEstadosFinales, 
-				arrayCadenas, ConsolePane, message_PC1, message_PC2, requestingPC);
+				arrayCadenas, ConsolePane, message_PC1, message_PC2, requestingPC, btnPc1, btnPc2);
 		
 		protocolAFD.AFDSimulator();
 	}

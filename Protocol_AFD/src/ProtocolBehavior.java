@@ -255,6 +255,7 @@ public class ProtocolBehavior {
 			messageIndex++;
 		}
 		else{
+			JOptionPane.showMessageDialog(null, "Simulation ended!", "Status", JOptionPane.INFORMATION_MESSAGE);
 			timer.stop();
 		}
 		

@@ -24,6 +24,7 @@ public class AFD {
 		StringBuilder builder = new StringBuilder();
 		
 		
+		builder.append("Automaton to be reduced:\n");
 		builder.append("States count: " + statesCount);
 		builder.append("\n-------------\nSymbols:\n");
 		

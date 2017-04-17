@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -97,24 +98,26 @@ public class Main {
 			
 			found = false;
 			
-			pairs.forEach((k,v) -> {
-				
+			for(Map.Entry<Pair, Boolean> entry : pairs.entrySet()) {
+			    Pair k = entry.getKey();
+			    Boolean v = entry.getValue();
+
 				if (v == false){
 					for (String a : afd.symbols) {
 						Integer d1 = afd.rules.get(new Leftside(k.P, a));
 						Integer d2 = afd.rules.get(new Leftside(k.Q, a));
 						
-						if(pairs.get(new Pair(d1, d2)) == true){
-							
-							pairs.put(new Pair(k.P, k.Q), true);
-							found = true;
-							break;
+						if(d1 != null && d2 != null){													
+							if(pairs.get(new Pair(d1, d2)) != null && pairs.get(new Pair(d1, d2)) == true){
+								pairs.put(new Pair(k.P, k.Q), true);
+								found = true;
+								break;
+							}
 						}
-						
 					}
 					
 				}
-			});
+			}
 			
 		} while (found);
 	}
@@ -166,6 +169,7 @@ public class Main {
 		});
 		
 		
+		System.out.println("Reduced automaton:\n-------------\n");
 		
 		System.out.print("States: ");
 		
@@ -182,8 +186,10 @@ public class Main {
 		System.out.println("Rules:");
 		rules.forEach((k,v) -> {
 			
-			System.out.print("k");			
-		});			
+			System.out.print(k + "\n");			
+		});
+		
+		System.out.println("-------------");
 	}
 	
 

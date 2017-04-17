@@ -17,7 +17,6 @@ public class Pair {
 	@Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-            // if deriving: appendSuper(super.hashCode()).
             append(P).
             append(Q).
             toHashCode();
@@ -32,7 +31,6 @@ public class Pair {
 
         Pair rhs = (Pair) obj;
         return new EqualsBuilder().
-            // if deriving: appendSuper(super.equals(obj)).
             append(P, rhs.P).
             append(Q, rhs.Q).
             isEquals();

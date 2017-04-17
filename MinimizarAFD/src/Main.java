@@ -208,6 +208,4 @@ public class Main {
 		outputResults(afd, pairs, e_class);
 	}
 	
-	
-
 }

@@ -18,7 +18,6 @@ public class Leftside {
 	@Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-            // if deriving: appendSuper(super.hashCode()).
             append(state).
             append(symbol).
             toHashCode();
@@ -33,7 +32,6 @@ public class Leftside {
 
         Leftside rhs = (Leftside) obj;
         return new EqualsBuilder().
-            // if deriving: appendSuper(super.equals(obj)).
             append(state, rhs.state).
             append(symbol, rhs.symbol).
             isEquals();

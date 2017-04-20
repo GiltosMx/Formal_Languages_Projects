@@ -22,7 +22,7 @@ public class MainWindow extends JFrame {
 	private JLabel lblErrorStatus;
 	private static JButton btnPc1;
 	private static JButton btnPc2;
-	
+	private static AFD_Status afd_status;
 	
 	private static String message_PC1;
 	private static String message_PC2;
@@ -53,7 +53,11 @@ public class MainWindow extends JFrame {
 			public void run() {
 				try {
 					MainWindow frame = new MainWindow();
+					afd_status = new AFD_Status();
+					afd_status.setLocationRelativeTo(null);
 					frame.setVisible(true);
+					afd_status.setVisible(true);
+					
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -82,7 +86,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		btnPc1.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
-		btnPc1.setBounds(39, 35, 125, 64);
+		btnPc1.setBounds(39, 15, 125, 64);
 		contentPane.add(btnPc1);
 		
 		btnPc2 = new JButton("PC 2");
@@ -93,7 +97,7 @@ public class MainWindow extends JFrame {
 		});
 		btnPc2.setToolTipText("Configurar PC2");
 		btnPc2.setIcon(new ImageIcon(MainWindow.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
-		btnPc2.setBounds(442, 35, 130, 64);
+		btnPc2.setBounds(442, 15, 130, 64);
 		contentPane.add(btnPc2);
 		
 		JSeparator separator = new JSeparator();
@@ -121,7 +125,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		btnRequestMessagePC1.setToolTipText("Pedir mensaje de la PC2");
-		btnRequestMessagePC1.setBounds(29, 125, 150, 25);
+		btnRequestMessagePC1.setBounds(29, 100, 150, 25);
 		contentPane.add(btnRequestMessagePC1);
 		
 		JButton btnRequestMessagePC2 = new JButton("Request Message");
@@ -132,7 +136,7 @@ public class MainWindow extends JFrame {
 			}
 		});
 		btnRequestMessagePC2.setToolTipText("Pedir mensaje de la PC1");
-		btnRequestMessagePC2.setBounds(432, 127, 150, 21);
+		btnRequestMessagePC2.setBounds(432, 100, 150, 21);
 		contentPane.add(btnRequestMessagePC2);
 		
 		JButton btnErrorSimulation = new JButton("Toggle Error Simulation");
@@ -154,7 +158,7 @@ public class MainWindow extends JFrame {
 				
 			}
 		});
-		btnErrorSimulation.setBounds(217, 72, 175, 25);
+		btnErrorSimulation.setBounds(217, 52, 175, 25);
 		contentPane.add(btnErrorSimulation);
 		
 		lblErrorStatus = new JLabel("");
@@ -165,8 +169,12 @@ public class MainWindow extends JFrame {
 	
 	
 	private void startRequest(){
+
 		ProtocolBehavior protocolAFD = new ProtocolBehavior(transitionsTable, arrayAlfabeto, arrayEstados, arrayEstadosFinales, 
-				arrayCadenas, ConsolePane, message_PC1, message_PC2, requestingPC, btnPc1, btnPc2);
+				arrayCadenas, ConsolePane, message_PC1, message_PC2, requestingPC, 
+				btnPc1, btnPc2, afd_status, lblErrorStatus);
+		
+		afd_status.updateStates(0);
 		
 		protocolAFD.AFDSimulator();
 	}

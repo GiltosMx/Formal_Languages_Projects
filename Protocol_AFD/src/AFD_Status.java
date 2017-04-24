@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 public class AFD_Status extends JFrame {
 
@@ -27,6 +29,7 @@ public class AFD_Status extends JFrame {
 		contentPane.setLayout(null);
 		
 		radioButtonQ0 = new JRadioButtonMenuItem("q0");
+		radioButtonQ0.setForeground(Color.BLUE);
 		radioButtonQ0.setBounds(12, 50, 50, 20);
 		//Siempre empieza en el estado 0
 		radioButtonQ0.setSelected(true);
@@ -53,6 +56,7 @@ public class AFD_Status extends JFrame {
 		contentPane.add(radioButtonQ4);
 		
 		radioButtonQ5 = new JRadioButtonMenuItem("q5");
+		radioButtonQ5.setForeground(Color.RED);
 		radioButtonQ5.setBounds(444, 50, 50, 20);
 		contentPane.add(radioButtonQ5);
 		

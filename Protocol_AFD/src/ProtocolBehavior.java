@@ -40,11 +40,30 @@ public class ProtocolBehavior {
 	
 	//---------------------------------------------------------------------//
 	
+	/**
+	 * Constructor de la clase. Inicializa todos los objetos necesarios para el
+	 * funcionamiento del simulador del protocolo.
+	 * @param transitionsTable Tabla de transiciones del automata.
+	 * @param arrayAlfabeto Arreglo con cada simbolo del alfabeto para el automata.
+	 * @param arrayEstados Arreglo con cada estado del automata.
+	 * @param arrayEstadosFinales Arreglo con todos los estados que son finales para el automata.
+	 * @param arrayCadenas Arreglo con cada cadena que procesara el automata.
+	 * @param ConsolePane El panel del area de consola de la ventana principal.
+	 * @param message_PC1 Mensaje almacenado en la PC1.
+	 * @param message_PC2 Mensaje almacenado en la PC2.
+	 * @param requestingPC Entero que define cual de las dos PCs pidio el mensaje a la otra.
+	 * @param btnPc1 Boton que contiene el icono de la PC1 en la ventana principal.
+	 * @param btnPc2 Boton que contiene el icono de la PC2 en la ventana principal.
+	 * @param afd_status Ventana AFD_Status que despliega informacion de los estados del automata.
+	 * @param lblErrorStatus Etiqueta que se despliega en la ventana principal
+	 * para indicar si esta activa la simulacion de errores.
+	 */
 	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, 
 			String[] arrayEstadosFinales,String[] arrayCadenas, JTextPane ConsolePane, 
 			String message_PC1, String message_PC2, int requestingPC, 
 			JButton btnPc1, JButton btnPc2, AFD_Status afd_status, JLabel lblErrorStatus){
 		
+		//Timer que se usa para actualizar los elementos de la interfaz grafica.
 		timer = new Timer(4000, updateGUI);
 		
 		messageIndex = 0;
@@ -72,6 +91,10 @@ public class ProtocolBehavior {
 	}
 	
 	
+	/**
+	 * Se encarga de llenar los HashMaps que se usan para rapido acceso
+	 * al momento de buscar en la tabla de transiciones.
+	 */
 	private void FillHashMaps(){
 			
 			for (int i = 0; i < arrayAlfabeto.length; i++) {			
@@ -86,6 +109,13 @@ public class ProtocolBehavior {
 		}
 	
 	
+	/**
+	 * Se encarga de simular el comportamiento del automata. Recorre la tabla de transiciones
+	 * para cada estado (usando HashMaps para rapido acceso a las ubicaciones), y va llenando
+	 * el arreglo statusMessage con informacion de como se va comportando el automata. 
+	 * Tambien estalece la bandera isAccepted verificando si el estado en el que finalizo el 
+	 * automata pertenece a los estados finales.
+	 */
 	public void AFDSimulator(){
 		
 		Integer currentStateIndex = stateIndex.get(arrayEstados[0]); //Siempre el primer estado es el inicial
@@ -138,6 +168,10 @@ public class ProtocolBehavior {
 		timer.start();
 	}
 	
+	/**
+	 * Se encarga de actualizar la interfaz de la ventana principal, suscrito
+	 * al evento del timer de la clase.
+	 */
 	ActionListener updateGUI = new ActionListener() {
 			
 			@Override
@@ -147,8 +181,14 @@ public class ProtocolBehavior {
 			}
 		};
 	
-	public void changeIcons(){
+		/**
+		 * Se encarga de actualizar los colores de las PCs en la ventana principal
+		 * dependiendo de que accion se este realizando en el protocolo.
+		 */
+		public void changeIcons(){
 		
+		//Establece cual es la longitud del arreglo de mensajes, 
+		//dependiendo si esta activa la simulacion de errores
 		if(messageIndex < (isAccepted ? statusMessage.length : 4)){
 			
 			if(requestingPC == 1){
@@ -196,10 +236,6 @@ public class ProtocolBehavior {
 					if(isAccepted){
 						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
 						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
-					}
-					else if(!isAccepted){
-						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
-						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
 					}
 					updateAFDStatus(0);
 				}
@@ -250,10 +286,6 @@ public class ProtocolBehavior {
 						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
 						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_blue.png")));
 					}
-					else if(!isAccepted){
-						btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
-						btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/icon_red.png")));
-					}
 					updateAFDStatus(0);
 				}					
 				
@@ -261,25 +293,32 @@ public class ProtocolBehavior {
 		}
 		else{
 			btnPc1.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
-			btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));
-			
+			btnPc2.setIcon(new ImageIcon(ProtocolBehavior.class.getResource("/icons/ic_airplay_black_24dp_2x.png")));			
 		}
 	}
 	
+	/**
+	 * Se encarga de actualizar el area de consola en la ventana principal con la informacion
+	 * de los mensajes transmitidos y recibidos en el protocolo.
+	 */
 	private void updateConsole(){		
 		int arrayLimit = 0;
 		
+		//Si el automata quedo en estado de error, entonces se encuentra activa la simulacion de errores
 		if(isAccepted){
-			arrayLimit = statusMessage.length;			
+			//Se toma el tamaño del arreglo de mensajes normalmente
+			arrayLimit = statusMessage.length;		
 		}
 		else{
+			//Se toma el tamaño del arreglo de mensajes con errores, que es de 4
 			arrayLimit = 4;
 		}
 		
 		if(messageIndex < arrayLimit){
 			consoleText.append(statusMessage[messageIndex]);
+			
 			//Si esta activa la simulacion de errores, mostrar el mensaje antes 
-			//y regresar al estado inicial la ventana con el automata
+			//y regresar al estado inicial la ventana AFD_Status
 			if(!isAccepted && messageIndex >= 3){
 				messageIndex++;
 				changeIcons();
@@ -297,6 +336,11 @@ public class ProtocolBehavior {
 		ConsolePane.setText(consoleText.toString());
 	}
 
+	/**
+	 * Actualiza el estado actual en la ventana AFD_Status haciendo una llamada al
+	 * metodo updateStates de la clase AFD_Status.
+	 * @param state Estado que se quiere establecer como activo en la ventana AFD_Status.
+	 */
 	private void updateAFDStatus(int state){
 		afd_status.updateStates(state);
 	}

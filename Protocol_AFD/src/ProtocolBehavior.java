@@ -22,6 +22,8 @@ public class ProtocolBehavior {
 	private String message_PC2;
 	private JButton btnPc1;
 	private JButton btnPc2;
+	private JButton btnRequestMessagePC1;
+	private JButton btnRequestMessagePC2;
 	private JLabel lblErrorStatus;
 	
 	private AFD_Status afd_status;
@@ -37,7 +39,6 @@ public class ProtocolBehavior {
 	//Mapas Hash para acceso a los indices de forma rapida
 	private HashMap<String, Integer> symbolIndex;
 	private HashMap<String, Integer> stateIndex;
-	
 	//---------------------------------------------------------------------//
 	
 	/**
@@ -57,11 +58,14 @@ public class ProtocolBehavior {
 	 * @param afd_status Ventana AFD_Status que despliega informacion de los estados del automata.
 	 * @param lblErrorStatus Etiqueta que se despliega en la ventana principal
 	 * para indicar si esta activa la simulacion de errores.
+	 * @param btnRequestMessagePC1 Boton en la ventana principal para pedir el mensaje a la PC2.
+	 * @param btnRequestMessagePC2 Boton en la ventana principal para pedir el mensaje a la PC1.
 	 */
 	public ProtocolBehavior(String[][] transitionsTable, String[] arrayAlfabeto, String[] arrayEstados, 
 			String[] arrayEstadosFinales,String[] arrayCadenas, JTextPane ConsolePane, 
 			String message_PC1, String message_PC2, int requestingPC, 
-			JButton btnPc1, JButton btnPc2, AFD_Status afd_status, JLabel lblErrorStatus){
+			JButton btnPc1, JButton btnPc2, AFD_Status afd_status, JLabel lblErrorStatus,
+			JButton btnRequestMessagePC1, JButton btnRequestMessagePC2){
 		
 		//Timer que se usa para actualizar los elementos de la interfaz grafica.
 		timer = new Timer(4000, updateGUI);
@@ -77,6 +81,8 @@ public class ProtocolBehavior {
 		this.ConsolePane = ConsolePane;
 		this.btnPc1 = btnPc1;
 		this.btnPc2 = btnPc2;
+		this.btnRequestMessagePC1 = btnRequestMessagePC1;
+		this.btnRequestMessagePC2 = btnRequestMessagePC2;
 		
 		this.transitionsTable = transitionsTable;
 		this.arrayAlfabeto = arrayAlfabeto;
@@ -325,12 +331,16 @@ public class ProtocolBehavior {
 				timer.stop();
 				JOptionPane.showMessageDialog(null, "Simulation ended!", "Status", JOptionPane.INFORMATION_MESSAGE);
 				updateAFDStatus(0);
+				btnRequestMessagePC1.setEnabled(true);
+				btnRequestMessagePC2.setEnabled(true);
 			}
 			messageIndex++;
 		}
 		else{
 			JOptionPane.showMessageDialog(null, "Simulation ended!", "Status", JOptionPane.INFORMATION_MESSAGE);
 			timer.stop();
+			btnRequestMessagePC1.setEnabled(true);
+			btnRequestMessagePC2.setEnabled(true);
 		}
 		
 		ConsolePane.setText(consoleText.toString());

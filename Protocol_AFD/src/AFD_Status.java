@@ -11,6 +11,8 @@ import java.awt.SystemColor;
 
 public class AFD_Status extends JFrame {
 
+								//Atributos
+	//---------------------------------------------------------------------//
 	private JPanel contentPane;
 	private JRadioButtonMenuItem radioButtonQ0;
 	private JRadioButtonMenuItem radioButtonQ1;
@@ -19,6 +21,7 @@ public class AFD_Status extends JFrame {
 	private JRadioButtonMenuItem radioButtonQ4;
 	private JRadioButtonMenuItem radioButtonQ5;
 	private JRadioButtonMenuItem radioButtonQ6;
+	//---------------------------------------------------------------------//
 
 	public AFD_Status() {
 		setTitle("Automaton Status");
@@ -33,6 +36,7 @@ public class AFD_Status extends JFrame {
 		radioButtonQ0.setBounds(12, 50, 50, 20);
 		//Siempre empieza en el estado 0
 		radioButtonQ0.setSelected(true);
+		radioButtonQ0.setToolTipText("Azul = Estado final");
 		contentPane.add(radioButtonQ0);
 		
 		JLabel lblAutomata = new JLabel("Automaton States:");
@@ -58,6 +62,7 @@ public class AFD_Status extends JFrame {
 		radioButtonQ5 = new JRadioButtonMenuItem("q5");
 		radioButtonQ5.setForeground(Color.RED);
 		radioButtonQ5.setBounds(444, 50, 50, 20);
+		radioButtonQ5.setToolTipText("Rojo = Estado de error");
 		contentPane.add(radioButtonQ5);
 		
 		radioButtonQ6 = new JRadioButtonMenuItem("q6");
@@ -65,6 +70,10 @@ public class AFD_Status extends JFrame {
 		contentPane.add(radioButtonQ6);
 	}
 
+	/**
+	 * Se encarga de actualizar el estado activo en la ventana desplegada.
+	 * @param state El estado que se quiere establecer como activo.
+	 */
 	public void updateStates(int state){
 			
 		if(state == 1){

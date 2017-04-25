@@ -15,6 +15,8 @@ import java.awt.Dialog.ModalityType;
 
 public class BehaviorChooser extends JDialog {
 
+								//Atributos
+	//---------------------------------------------------------------------//
 	private final JPanel contentPanel = new JPanel();
 	
 	public String[] resendOneTime_Behavior = {"RFNM_S", "RFNM_E", "ACK_S", "MSG_S", "ACK_N", "MSG_S","ACK_R", "TO_RST"};
@@ -24,7 +26,14 @@ public class BehaviorChooser extends JDialog {
 	public int chosenBehavior = 0;
 	private int oldBehavior = 0;
 	private String oldBehaviorString = "Behavior: Normal";
+	//---------------------------------------------------------------------//
 
+	/**
+	 * Constructor de la clase. Este objeto muestra un listado de comportamientos
+	 * disponibles para el protocolo.
+	 * @param lblCurrentBehavior JLabel de la ventana principal que muestra el
+	 * comportamiento seleccionado.
+	 */
 	public BehaviorChooser(JLabel lblCurrentBehavior) {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setTitle("Behavior Chooser");

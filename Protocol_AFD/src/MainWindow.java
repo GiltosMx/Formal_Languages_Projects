@@ -26,6 +26,8 @@ public class MainWindow extends JFrame {
 	private static JLabel lblCurrentBehavior;
 	private static JButton btnPc1;
 	private static JButton btnPc2;
+	private static JButton btnRequestMessagePC1;
+	private static JButton btnRequestMessagePC2;
 	private static AFD_Status afd_status;
 	private static BehaviorChooser behaviorChooserWindow;
 	
@@ -64,11 +66,12 @@ public class MainWindow extends JFrame {
 				try {
 					MainWindow frame = new MainWindow();
 					afd_status = new AFD_Status();
-					afd_status.setLocationRelativeTo(null);
-					frame.setVisible(true);
-					afd_status.setVisible(true);
 					
-
+					//Hace que la ventana se cree al centro de la pantalla
+					afd_status.setLocationRelativeTo(null);
+					
+					frame.setVisible(true);
+					afd_status.setVisible(true);		
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -136,7 +139,7 @@ public class MainWindow extends JFrame {
 		ConsoleArea.setBounds(250, 158, 97, 21);
 		contentPane.add(ConsoleArea);
 		
-		JButton btnRequestMessagePC1 = new JButton("Request Message");
+		btnRequestMessagePC1 = new JButton("Request Message");
 		btnRequestMessagePC1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				requestingPC = 1;
@@ -147,7 +150,7 @@ public class MainWindow extends JFrame {
 		btnRequestMessagePC1.setBounds(29, 100, 150, 25);
 		contentPane.add(btnRequestMessagePC1);
 		
-		JButton btnRequestMessagePC2 = new JButton("Request Message");
+		btnRequestMessagePC2 = new JButton("Request Message");
 		btnRequestMessagePC2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				requestingPC = 2;
@@ -159,10 +162,12 @@ public class MainWindow extends JFrame {
 		contentPane.add(btnRequestMessagePC2);
 		
 		JButton btnErrorSimulation = new JButton("Toggle Error Simulation");
-		btnErrorSimulation.setToolTipText("Activar simulacion de errores");
+		btnErrorSimulation.setToolTipText("Alternar simulacion de errores");
 		btnErrorSimulation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				//Si esta desactivada la simulacion de errores, se pone un error
+				//eliminando el mensaje en la posicion 2 del arreglo
 				if(lblErrorStatus.getText().length() == 0){
 					lblErrorStatus.setText("ERROR SIMULATION ENABLED");
 					
@@ -198,6 +203,10 @@ public class MainWindow extends JFrame {
 	}
 	
 	
+	/**
+	 * Se encarga de instanciar el objeto ProtocolBehavior, que es el que le da
+	 * la funcionalidad al programa.
+	 */
 	private void startRequest(){
 		
 		//Cambia el arreglo con los mensajes del protocolo dependiendo del comportamiento elegido 
@@ -213,17 +222,22 @@ public class MainWindow extends JFrame {
 			break;
 		}
 		
-		//Si está activa la simulación de errores, se cambia el arreglo con los mensajes del protocolo
-		//por uno con errores
+		//Si está activa la simulación de errores, se cambia el arreglo con los 
+		//mensajes del protocolo por uno con errores
 		if(lblErrorStatus.getText().length() > 0){
 			arrayCadenas_Changed = arrayCadenas;
 		}
 		
 		ProtocolBehavior protocolAFD = new ProtocolBehavior(transitionsTable, arrayAlfabeto, arrayEstados, arrayEstadosFinales, 
 				arrayCadenas_Changed, ConsolePane, message_PC1, message_PC2, requestingPC, 
-				btnPc1, btnPc2, afd_status, lblErrorStatus);
+				btnPc1, btnPc2, afd_status, lblErrorStatus, btnRequestMessagePC1,btnRequestMessagePC2);
 		
 		afd_status.updateStates(0);
+		
+		//Desactiva los botones para evitar que se haga mas de una solicitud
+		//de mensaje al mismo tiempo
+		btnRequestMessagePC1.setEnabled(false);
+		btnRequestMessagePC2.setEnabled(false);
 		
 		protocolAFD.AFDSimulator();
 	}

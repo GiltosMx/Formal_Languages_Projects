@@ -85,7 +85,7 @@ public class MainWindow extends JFrame {
 	public MainWindow() {
 		setTitle("Protocol_AFD");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 626, 397);
+		setBounds(100, 100, 653, 398);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

@@ -119,7 +119,7 @@ public class ProtocolBehavior {
 	 * Se encarga de simular el comportamiento del automata. Recorre la tabla de transiciones
 	 * para cada estado (usando HashMaps para rapido acceso a las ubicaciones), y va llenando
 	 * el arreglo statusMessage con informacion de como se va comportando el automata. 
-	 * Tambien estalece la bandera isAccepted verificando si el estado en el que finalizo el 
+	 * Tambien establece la bandera isAccepted verificando si el estado en el que finalizo el 
 	 * automata pertenece a los estados finales.
 	 */
 	public void AFDSimulator(){

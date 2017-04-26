@@ -24,6 +24,7 @@ public class AFD_Status extends JFrame {
 	//---------------------------------------------------------------------//
 
 	public AFD_Status() {
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setTitle("Automaton Status");
 		setBounds(100, 100, 603, 137);
 		contentPane = new JPanel();

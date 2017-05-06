@@ -37,7 +37,7 @@ public class BehaviorChooser extends JDialog {
 	public BehaviorChooser(JLabel lblCurrentBehavior) {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setTitle("Behavior Chooser");
-		setBounds(100, 100, 347, 298);
+		setBounds(100, 100, 445, 298);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -78,16 +78,16 @@ public class BehaviorChooser extends JDialog {
 		}
 		
 		JLabel lblResendOnce = new JLabel("Protocol resends the message once");
-		lblResendOnce.setBounds(110, 60, 220, 15);
+		lblResendOnce.setBounds(110, 60, 323, 15);
 		contentPanel.add(lblResendOnce);
 		{
 			JLabel lblResendTwice = new JLabel("Protocol resends the message twice");
-			lblResendTwice.setBounds(110, 115, 220, 15);
+			lblResendTwice.setBounds(110, 115, 323, 15);
 			contentPanel.add(lblResendTwice);
 		}
 		{
 			JLabel lblNormalBehavior = new JLabel("Protocol behaves normally");
-			lblNormalBehavior.setBounds(110, 170, 165, 15);
+			lblNormalBehavior.setBounds(110, 170, 323, 15);
 			contentPanel.add(lblNormalBehavior);
 		}
 		{

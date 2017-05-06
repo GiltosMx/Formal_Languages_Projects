@@ -93,7 +93,7 @@ public class MainWindow extends JFrame {
 		
 		lblCurrentBehavior = new JLabel("Behavior: Normal");
 		lblCurrentBehavior.setForeground(SystemColor.activeCaption);
-		lblCurrentBehavior.setBounds(250, 130, 140, 15);
+		lblCurrentBehavior.setBounds(250, 130, 200, 15);
 		contentPane.add(lblCurrentBehavior);
 		
 		//Al inicio, se tiene por defecto el comportamiento normal

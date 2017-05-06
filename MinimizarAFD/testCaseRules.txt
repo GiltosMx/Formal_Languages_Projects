@@ -1,3 +1,16 @@
+--Program Input
+
+Number of states:
+4
+Symbols (comma separated):
+0,1
+Favorable states (comma separated):
+4
+Start state:
+
+0
+Rules for the automaton (comma separated: st,sym,st. Finish with enter and ";"):
+
 0,0,1
 0,1,3
 1,0,2
@@ -9,3 +22,49 @@
 4,0,4
 4,1,4
 ;
+
+
+-- Program Output
+
+Automaton to be reduced:
+States count: 4
+-------------
+Symbols:
+0, 1, 
+-------------
+-------------
+Favorable states:
+4 : true,
+-------------
+
+Favorable state: 4
+Start state: 0
+-------------
+Rules:
+1,0--> 2
+2,1--> 4
+0,0--> 1
+1,1--> 4
+0,1--> 3
+4,0--> 4
+3,0--> 2
+4,1--> 4
+2,0--> 1
+3,1--> 4
+-------------
+
+Reduced automaton:
+-------------
+
+States: 3 4 
+Inital state: 0
+Favorable state: 4
+Rules:
+(4, 1) -> 4
+(4, 0) -> 4
+(3, 1) -> 4
+(0, 1) -> 3
+(3, 0) -> 3
+(0, 0) -> 3
+-------------
+

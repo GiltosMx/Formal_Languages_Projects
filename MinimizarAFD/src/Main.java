@@ -14,6 +14,12 @@ public class Main {
 	public static Scanner scanner = new Scanner(System.in);
 	
 	
+	/**
+	 * Se encarga de leer los datos de entrada al programa para
+	 * tener el automata que se va a minimizar.
+	 * @return Es el objeto de tipo AFD que fue creado con los valores
+	 * introducidos por el usuario.
+	 */
 	public static AFD readInput(){
 		AFD afd = new AFD();
 		
@@ -75,6 +81,13 @@ public class Main {
 	}
 	
 	
+	/**
+	 * Se encarga de hacer el paso 2 del procedimiento marcar, verificando cuales
+	 * pares de estados son distinguibles.
+	 * @param afd Objeto AFD con los datos del automata que se va a minimizar.
+	 * @return HashMap que ya contiene los pares de estados distinguibles marcados
+	 * en true.
+	 */
 	public static HashMap<Pair, Boolean> setupMarkedPairs(AFD afd){
 		
 		HashMap<Pair, Boolean> pairs = new HashMap<Pair, Boolean>();
@@ -93,6 +106,15 @@ public class Main {
 	}
 	
 	
+	/**
+	 * Se encarga de hacer el paso 3 del procedimiento marcar, verificando la funcion
+	 * de transicion extendida de cada uno de los pares de estados que estaban
+	 * marcados como indistinguibles.
+	 * @param afd Objeto de tipo AFD, que es el automata que se va a minimizar.
+	 * @param pairs HashMap obtenido de setupMarkedPairs(AFD afd). Se utiliza para
+	 * obtener los pares de estados indistinguibles, y en caso de que se reconozca
+	 * un nuevo par distinguible, se marca dentro del mismo.
+	 */
 	public static void processPairs(AFD afd, HashMap<Pair, Boolean> pairs){
 		do {
 			
@@ -122,6 +144,14 @@ public class Main {
 		} while (found);
 	}
 	
+	/**
+	 * Se encarga de crear las clases de equivalencia con base en los estados distinguibles
+	 * e indistinguibles obtenidos de processPairs(AFD afd, HashMap<Pair, Boolean> pairs).
+	 * @param afd Objeto AFD que tiene los datos del automata que se va a minimizar. 
+	 * @param pairs HashMap que contiene los pares de estados (Key) y si son distinguibles
+	 * o indistinguibles (Value).
+	 * @return Arreglo con las clases de equivalencia procesadas, para minimizar el automata.
+	 */
 	public static int[] createEqClasses(AFD afd, HashMap<Pair, Boolean> pairs){
 		
 		int[] e_class = new int[afd.statesCount + 1];
@@ -145,7 +175,15 @@ public class Main {
 		return e_class;
 	}
 	
-	
+	/**
+	 * Solo se encarga de imprimir los resultados a consola, indicando al usuario el automata
+	 * original que introdujo, y el automata reducido despues de haber pasado por el algoritmo.
+	 * @param afd Objeto AFD que tiene los datos del automata que se va a minimizar.
+	 * @param pairs HashMap que contiene los pares de estados (Key) y si son distinguibles
+	 * o indistinguibles (Value).
+	 * @param e_class Arreglo con las clases de equivalencia obtenidas de
+	 * createEqClasses(AFD afd, HashMap<Pair, Boolean> pairs)
+	 */
 	public static void outputResults(AFD afd, HashMap<Pair, Boolean> pairs, int[] e_class){
 		
 		HashMap<Integer, Boolean> states = new HashMap<Integer, Boolean>();

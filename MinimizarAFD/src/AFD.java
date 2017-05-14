@@ -1,5 +1,10 @@
 import java.util.HashMap;
 
+/**
+ * Esta clase define la estructura de un automata con todos sus atributos.
+ * @author adrian
+ *
+ */
 public class AFD {
 	
 					//Atributos

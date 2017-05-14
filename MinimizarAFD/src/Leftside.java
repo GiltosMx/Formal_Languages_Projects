@@ -1,6 +1,13 @@
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Esta clase define el "lado izquierdo" de la funcion de transicion
+ * extendida para el automata, es decir, el estado actual y el simbolo
+ * del alfabeto recibido.
+ * @author adrian
+ *
+ */
 public class Leftside {
 	
 	

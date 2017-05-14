@@ -1,6 +1,11 @@
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Clase que define pares de estados del automata.
+ * @author adrian
+ *
+ */
 public class Pair {
 	
 								//Atributos
